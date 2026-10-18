@@ -1,0 +1,504 @@
+.section { padding: 88px 0; }
+.eyebrow { font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.section-title { font-size: clamp(1.7rem, 3.5vw, 2.4rem); line-height: 1.2; margin: 8px 0 36px; letter-spacing: -0.02em; }
+.lead { font-size: 1.12rem; margin-bottom: 14px; }
+.muted { color: var(--muted); }
+.subhead { margin: 40px 0 14px; font-size: 1.15rem; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px;
+  font-weight: 600; border: 1px solid transparent; transition: 0.2s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-strong); transform: translateY(-2px); }
+:root[data-theme='dark'] .btn-primary { color: #0b0c16; }
+.btn-ghost { border-color: var(--border); background: var(--surface); color: var(--text); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+/* =========================================================================
+   Hero Section — Unified Canvas Paint Brush & Text Blend
+   ========================================================================= */
+.hero-blend-section {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: calc(var(--nav-h) + 20px) 0 40px;
+}
+
+/* 1. Full-Hero Interactive Paint Canvas Stage */
+.hero-canvas-blend-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  cursor: crosshair;
+  user-select: none;
+  touch-action: none;
+}
+
+.canvas-tech-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-blend-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+/* Custom Cyber Paint Brush Follower */
+.canvas-brush-cursor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.brush-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--cyan);
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.75), inset 0 0 10px rgba(0, 242, 254, 0.3);
+  animation: ringRotate 14s linear infinite;
+}
+
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.brush-bristle-cross {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.brush-tip-badge {
+  position: absolute;
+  bottom: -22px;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: #00f2fe;
+  background: rgba(11, 12, 22, 0.88);
+  padding: 1px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* HUD Meta Indicator */
+.hero-canvas-hud {
+  position: absolute;
+  top: calc(var(--nav-h) + 16px);
+  right: 28px;
+  z-index: 4;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--cyan);
+  background: rgba(11, 12, 22, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 242, 254, 0.35);
+}
+
+.hud-ping-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f2fe;
+  box-shadow: 0 0 8px #00f2fe;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+/* Floating Brush Toolbar */
+.hero-brush-toolbar {
+  position: absolute;
+  bottom: 22px;
+  right: 28px;
+  z-index: 8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.toolbar-pill-group {
+  display: flex;
+  gap: 3px;
+  background: var(--surface-translucent);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3px;
+  box-shadow: var(--shadow);
+}
+
+.tool-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tool-pill:hover {
+  color: var(--text);
+  background: var(--accent-soft);
+}
+
+.tool-pill.is-active {
+  color: #fff;
+  background: var(--accent);
+}
+
+:root[data-theme='dark'] .tool-pill.is-active {
+  color: #0b0c16;
+}
+
+.tool-pill.action-pill {
+  font-family: var(--mono);
+  font-size: 0.73rem;
+}
+
+/* ---------------- 2. Blended Hero Text Overlay ---------------- */
+.hero-blend-container {
+  position: relative;
+  z-index: 3;
+  pointer-events: none; /* Let canvas capture mouse across hero */
+  width: min(1180px, 100% - 40px);
+  margin-inline: auto;
+}
+
+.hero-blend-card {
+  max-width: 590px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 34px 38px;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  pointer-events: auto; /* Buttons & links clickable */
+  transition: border-color 0.25s ease;
+}
+
+.hero-blend-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+
+.hero-status-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.status-ping-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+.status-sep { color: var(--border); }
+.status-inst { color: var(--muted); }
+
+.hero-identity-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-intro-label {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.hero-name-heading {
+  font-size: clamp(2.4rem, 4.3vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin: 4px 0 6px;
+  color: var(--text);
+}
+
+.hero-role-subheading {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.role-accent { color: var(--accent); }
+
+.hero-mission-statement {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 530px;
+}
+
+/* Metric Chips */
+.hero-metric-badges {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.metric-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.metric-chip:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.metric-num {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.metric-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.metric-chip.highlight-chip {
+  border-color: color-mix(in srgb, var(--cyan) 50%, var(--border));
+  background: var(--cyan-soft);
+}
+
+.metric-chip.highlight-chip .metric-num {
+  color: var(--cyan-strong);
+}
+
+:root[data-theme='dark'] .metric-chip.highlight-chip .metric-num {
+  color: #00f2fe;
+}
+
+/* Action Buttons */
+.hero-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.btn-blend {
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.btn-arrow-icon {
+  transition: transform 0.2s ease;
+}
+
+.btn-blend:hover .btn-arrow-icon {
+  transform: translateX(4px);
+}
+
+/* Card Foot: Socials & Paint Tip */
+.hero-card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.hero-paint-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* =========================================================================
+   Standard Sections — Cards, Grid, Timeline & Micro-interactions
+   ========================================================================= */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+.card-title { font-size: 1.15rem; margin-bottom: 6px; }
+.card-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.period { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: start; }
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; }
+.stats li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s ease;
+}
+.stats li:hover { border-color: var(--accent); }
+.stats strong { font-size: 1.5rem; color: var(--accent); font-family: var(--mono); }
+.stats span { font-size: 0.85rem; color: var(--muted); }
+.timeline { display: flex; flex-direction: column; gap: 18px; margin-top: 14px; }
+.timeline li { border-left: 2px solid var(--accent); padding-left: 16px; }
+.timeline h4 { font-size: 1rem; margin: 2px 0; }
+.timeline p { color: var(--muted); font-size: 0.93rem; }
+
+/* Lists & Badges */
+.bullets { padding-left: 18px; list-style: disc; display: flex; flex-direction: column; gap: 8px; }
+.bullets li::marker { color: var(--accent); }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.tags li {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--accent);
+}
+
+/* Projects */
+.project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+.project { display: flex; flex-direction: column; gap: 10px; position: relative; transition: 0.25s; }
+.project:hover { transform: translateY(-4px); border-color: var(--accent); }
+.project.is-featured { grid-column: 1 / -1; }
+.badge {
+  align-self: flex-start; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 999px;
+}
+:root[data-theme='dark'] .badge { color: #0b0c16; }
+.project-links { display: flex; gap: 18px; margin-top: auto; padding-top: 12px; font-weight: 600; }
+.project-links a { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
+.project-links a:hover { text-decoration: underline; }
+
+/* Skills / achievements */
+.skill-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.achievement-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.leadership { display: flex; flex-direction: column; gap: 10px; }
+.leadership li { padding-left: 16px; border-left: 2px solid var(--accent); color: var(--muted); }
+.leadership strong { color: var(--text); }
+
+/* Contact */
+.contact { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+.contact-links { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Responsive */
+@media (max-width: 920px) {
+  .section { padding: 64px 0; }
+  .hero-blend-section {
+    padding-top: calc(var(--nav-h) + 16px);
+    padding-bottom: 90px;
+    align-items: flex-end;
+  }
+  .hero-blend-card {
+    max-width: 100%;
+    margin-top: 320px;
+    padding: 26px 22px;
+  }
+  .hero-brush-toolbar {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    justify-content: center;
+  }
+  .hero-canvas-hud {
+    top: calc(var(--nav-h) + 8px);
+    right: 12px;
+    font-size: 0.62rem;
+  }
+  .hero-metric-badges {
+    grid-template-columns: 1fr 1fr;
+  }
+  .about-grid, .project-grid, .skill-grid, .achievement-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-metric-badges {
+    grid-template-columns: 1fr;
+  }
+  .hero-card-foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
