@@ -4,8 +4,11 @@ import { experience } from '../../data/profile.js';
 export default function Experience() {
   return (
     <Section id="experience" eyebrow="Experience" title="Where I've worked">
+      <div className="xp-timeline" data-line>
       {experience.map((x) => (
-        <article className="card" key={x.role}>
+        <div className="xp-item" key={x.role}>
+        <span className="xp-dot" aria-hidden="true" />
+        <article className="card">
           <div className="card-head">
             <div>
               <h3 className="card-title">{x.role}</h3>
@@ -17,7 +20,9 @@ export default function Experience() {
             {x.points.map((p) => <li key={p}>{p}</li>)}
           </ul>
         </article>
+        </div>
       ))}
+      </div>
     </Section>
   );
 }

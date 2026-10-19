@@ -1,5 +1,6 @@
 import Section from '../ui/Section.jsx';
 import { profile, education } from '../../data/profile.js';
+import CountUp from '../ui/CountUp.jsx';
 import { languages } from '../../data/highlights.js';
 
 export default function About() {
@@ -12,7 +13,7 @@ export default function About() {
           <ul className="stats">
             {profile.stats.map((s) => (
               <li key={s.label}>
-                <strong>{s.value}</strong>
+                <strong><CountUp value={s.value} /></strong>
                 <span>{s.label}</span>
               </li>
             ))}
@@ -20,7 +21,7 @@ export default function About() {
         </div>
         <div className="card">
           <h3 className="card-title">Education</h3>
-          <ul className="timeline">
+          <ul className="timeline" data-line>
             {education.map((e) => (
               <li key={e.school}>
                 <span className="period">{e.period}</span>

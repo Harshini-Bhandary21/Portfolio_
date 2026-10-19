@@ -7,7 +7,6 @@ export const profile = {
     'Engineering student who combines full-stack development with AI, IoT and hardware to build solutions that are practical, usable and live. Looking for an opportunity to contribute to a team building products with real impact.',
   location: 'Pune, India',
   email: 'harshinibhandary21@gmail.com',
-  phone: '+91 9322438027',
   resume: '/Harshini-Bhandary-Resume.pdf',
   avatar: '/split-concept-portrait.jpg',
   avatarCasual: '/portrait-casual.jpg',

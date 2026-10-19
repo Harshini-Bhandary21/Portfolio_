@@ -1,3 +1,5 @@
+import useScrollEffects from './hooks/useScrollEffects.js';
+import useTilt from './hooks/useTilt.js';
 import Navbar from './components/layout/Navbar.jsx';
 import Footer from './components/layout/Footer.jsx';
 import Hero from './components/sections/Hero.jsx';
@@ -9,8 +11,12 @@ import Achievements from './components/sections/Achievements.jsx';
 import Contact from './components/sections/Contact.jsx';
 
 export default function App() {
+  useScrollEffects();
+  useTilt();
   return (
     <>
+      <div className="scroll-progress" aria-hidden="true" />
+      <div className="bg-orbs" aria-hidden="true"><span /><span /><span /></div>
       <a className="skip-link" href="#main">Skip to content</a>
       <Navbar />
       <main id="main">

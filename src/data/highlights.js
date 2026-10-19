@@ -1,8 +1,11 @@
 export const skills = [
-  { group: 'Languages', items: ['C++', 'Java', 'JavaScript', 'Python'] },
-  { group: 'Frameworks', items: ['React', 'Node.js', 'Express.js', 'Flask'] },
-  { group: 'Tools & Platforms', items: ['Git', 'GitHub', 'Postman', 'Bash', 'Arduino'] },
-  { group: 'Concepts', items: ['Computer Vision', 'IoT Sensor Integration', 'REST APIs'] },
+  { group: 'Languages', items: ['C++', 'Java', 'JavaScript'] },
+  { group: 'Frameworks', items: ['React', 'Node.js', 'Express.js'] },
+  { group: 'Tools & Platforms', items: ['Git', 'GitHub', 'Postman'] },
+  {
+    group: 'AI / ML',
+    items: ['LangGraph', 'LangChain', 'LightGBM', 'RAG', 'Random Forest', 'Seasonal-naive', 'CP-SAT', 'Genetic Algorithm', 'A*'],
+  },
 ];
 
 export const achievements = [
@@ -31,3 +34,23 @@ export const leadership = [
 ];
 
 export const languages = ['English', 'Hindi', 'Marathi'];
+
+// Logos served by simple-icons (https://cdn.simpleicons.org/<slug>/<hex>); dark icons use white for the dark theme.
+export const techIcons = {
+  'C++': { slug: 'cplusplus', color: '00599C' },
+  Java: { slug: 'openjdk', color: 'ED8B00' },
+  JavaScript: { slug: 'javascript', color: 'F7DF1E' },
+  React: { slug: 'react', color: '61DAFB' },
+  'Node.js': { slug: 'nodedotjs', color: '5FA04E' },
+  'Express.js': { slug: 'express', color: 'ffffff' },
+  Git: { slug: 'git', color: 'F05032' },
+  GitHub: { slug: 'github', color: 'ffffff' },
+  Postman: { slug: 'postman', color: 'FF6C37' },
+  LangChain: { slug: 'langchain', color: '1C9C8C' },
+  LangGraph: { slug: 'langgraph', color: '1C9C8C' },
+};
+
+export const iconUrl = (name) => {
+  const i = techIcons[name];
+  return i ? `https://cdn.simpleicons.org/${i.slug}/${i.color}` : null;
+};
