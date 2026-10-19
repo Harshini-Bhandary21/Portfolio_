@@ -10,6 +10,7 @@ export const profile = {
   resume: '/Harshini-Bhandary-Resume.pdf',
   avatar: '/split-concept-portrait.jpg',
   avatarCasual: '/portrait-casual.jpg',
+  avatarCutout: '/portrait-cutout.png',
   avatarCyborg: '/portrait-cyborg.jpg',
   socials: {
     github: 'https://github.com/Harshini-Bhandary21',
