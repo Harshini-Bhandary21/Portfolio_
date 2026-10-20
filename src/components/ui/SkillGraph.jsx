@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { skills, iconUrl } from '../../data/highlights.js';
 
-const COLORS = ['#4fc3f7', '#8ea2ff', '#7be0d0', '#c3a6ff'];
+const COLORS = ['#ff8fa3', '#f2b880', '#e9cf8a', '#d9a0e8'];
 const HUB_MARK = ['</>', '{ }', '⌘', 'AI'];
 
 const monogram = (name) => {
