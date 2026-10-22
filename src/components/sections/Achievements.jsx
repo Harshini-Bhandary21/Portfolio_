@@ -1,5 +1,5 @@
 import Section from '../ui/Section.jsx';
-import { achievements, leadership, languages } from '../../data/highlights.js';
+import { achievements, leadership } from '../../data/highlights.js';
 
 export default function Achievements() {
   return (
@@ -20,9 +20,6 @@ export default function Achievements() {
           {leadership.map((l, i) => (
             <li style={{ '--n': i }} key={l.role}><strong>{l.role}</strong><span>{l.org}</span></li>
           ))}
-        </ul>
-        <ul className="wall-langs" aria-label="Languages">
-          {languages.map((l) => <li key={l}>{l}</li>)}
         </ul>
       </div>
     </Section>
