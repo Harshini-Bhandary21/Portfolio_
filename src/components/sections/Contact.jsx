@@ -10,6 +10,17 @@ const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
 
 export default function Contact() {
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${profile.email}`; // clipboard blocked: fall back to the mail app
+    }
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -50,6 +61,7 @@ export default function Contact() {
           </p>
           <div className="contact-links">
             <a className="btn btn-primary" href={`mailto:${profile.email}`}><MailIcon /> {profile.email}</a>
+            <button type="button" className="btn copy-btn" onClick={copyEmail}>{copied ? 'Copied ✓' : 'Copy email'}</button>
           </div>
           <SocialLinks />
         </div>

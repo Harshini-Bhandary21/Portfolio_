@@ -1,3 +1,4 @@
+import SplitText from './SplitText.jsx';
 import useReveal from '../../hooks/useReveal.js';
 
 export default function Section({ id, eyebrow, title, children }) {
@@ -6,7 +7,7 @@ export default function Section({ id, eyebrow, title, children }) {
     <section id={id} className="section">
       <div className="container reveal" ref={ref}>
         {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-        {title && <h2 className="section-title">{title}</h2>}
+        {title && <SplitText as="h2" className="section-title" text={title} />}
         {children}
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { GithubIcon, LinkedinIcon, InstagramIcon, MailIcon, DownloadIcon } from './Icons.jsx';
+import SplitText from './SplitText.jsx';
 import { profile } from '../../data/profile.js';
 
 const BASE_SRC = '/assets/hero-developer.png';
@@ -214,8 +215,9 @@ export default function HeroBrushSection() {
 
       <div className="hbs-fg">
         <div className="hbs-card">
+          <span className="hbs-status"><i /> Open to opportunities</span>
           <span className="hbs-eyebrow">Hi, I'm</span>
-          <h1 className="hbs-name">{profile.name}</h1>
+          <SplitText as="h1" className="hbs-name" text={profile.name} />
           <p className="hbs-bio">{profile.tagline}</p>
 
           <ul className="hbs-links">
@@ -235,6 +237,7 @@ export default function HeroBrushSection() {
           </ul>
         </div>
       </div>
+      <span className="hbs-scroll" aria-hidden="true">Scroll</span>
     </section>
   );
 }
