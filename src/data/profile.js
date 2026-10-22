@@ -1,6 +1,7 @@
 export const profile = {
   name: 'Harshini Bhandary',
   role: 'Software Engineer in the making',
+  roles: ['Full-stack developer', 'AI & IoT builder', 'Hackathon winner', 'Accessibility advocate'],
   tagline:
     'I turn real-world problems into working software, with a focus on accessibility and worker safety.',
   summary:

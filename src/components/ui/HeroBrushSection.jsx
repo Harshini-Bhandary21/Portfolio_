@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { GithubIcon, LinkedinIcon, InstagramIcon, MailIcon, DownloadIcon } from './Icons.jsx';
+import RoleRotator from './RoleRotator.jsx';
 import SplitText from './SplitText.jsx';
 import { profile } from '../../data/profile.js';
 
@@ -218,6 +219,7 @@ export default function HeroBrushSection() {
           <span className="hbs-status"><i /> Open to opportunities</span>
           <span className="hbs-eyebrow">Hi, I'm</span>
           <SplitText as="h1" className="hbs-name" text={profile.name} />
+          <RoleRotator roles={profile.roles} />
           <p className="hbs-bio">{profile.tagline}</p>
 
           <ul className="hbs-links">

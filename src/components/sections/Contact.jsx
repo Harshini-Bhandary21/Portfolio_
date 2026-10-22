@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Section from '../ui/Section.jsx';
+import LocalTime from '../ui/LocalTime.jsx';
 import SocialLinks from '../ui/SocialLinks.jsx';
 import { MailIcon } from '../ui/Icons.jsx';
 import { profile } from '../../data/profile.js';
@@ -63,6 +64,7 @@ export default function Contact() {
             <a className="btn btn-primary" href={`mailto:${profile.email}`}><MailIcon /> {profile.email}</a>
             <button type="button" className="btn copy-btn" onClick={copyEmail}>{copied ? 'Copied ✓' : 'Copy email'}</button>
           </div>
+          <LocalTime place={profile.location} />
           <SocialLinks />
         </div>
 
