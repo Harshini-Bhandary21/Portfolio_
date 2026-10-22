@@ -5,6 +5,7 @@ export default function Achievements() {
   return (
     <Section id="achievements">
       <div className="wall">
+        <p className="eyebrow">Recognition</p>
         <h2 className="wall-title">Achievements</h2>
         <ul className="wall-grid">
           {achievements.map((x, i) => (
@@ -15,6 +16,7 @@ export default function Achievements() {
             </li>
           ))}
         </ul>
+        <p className="eyebrow">Beyond the code</p>
         <h2 className="wall-title">Leadership</h2>
         <ul className="wall-lead">
           {leadership.map((l, i) => (

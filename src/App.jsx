@@ -1,5 +1,6 @@
 import useScrollEffects from './hooks/useScrollEffects.js';
 import useTilt from './hooks/useTilt.js';
+import useDepthTilt from './hooks/useDepthTilt.js';
 import useSmoothScroll from './hooks/useSmoothScroll.js';
 import Loader from './components/ui/Loader.jsx';
 import BackToTop from './components/ui/BackToTop.jsx';
@@ -17,6 +18,7 @@ import Contact from './components/sections/Contact.jsx';
 export default function App() {
   useScrollEffects();
   useTilt();
+  useDepthTilt();
   useSmoothScroll();
   return (
     <>

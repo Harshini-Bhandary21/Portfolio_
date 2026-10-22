@@ -222,6 +222,11 @@ export default function HeroBrushSection() {
           <RoleRotator roles={profile.roles} />
           <p className="hbs-bio">{profile.tagline}</p>
 
+          <div className="hbs-cta">
+            <a className="hbs-btn hbs-btn-primary" href="#projects">View my work <span aria-hidden="true">→</span></a>
+            <a className="hbs-btn hbs-btn-ghost" href="#contact">Get in touch</a>
+          </div>
+
           <ul className="hbs-links">
             {links.map(({ label, href, Icon, external, download }) => (
               <li key={label}>

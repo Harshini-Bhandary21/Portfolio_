@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Section from '../ui/Section.jsx';
 import LocalTime from '../ui/LocalTime.jsx';
 import SocialLinks from '../ui/SocialLinks.jsx';
+import TechCube from '../ui/TechCube.jsx';
 import { MailIcon } from '../ui/Icons.jsx';
 import { profile } from '../../data/profile.js';
 
@@ -66,6 +67,7 @@ export default function Contact() {
           </div>
           <LocalTime place={profile.location} />
           <SocialLinks />
+          <TechCube />
         </div>
 
         <form className="contact-form" onSubmit={onSubmit}>

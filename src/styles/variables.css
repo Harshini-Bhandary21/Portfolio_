@@ -12,9 +12,9 @@
   --cyan: #a83a54;
   --cyan-strong: #7a263a;
   --cyan-soft: rgba(92, 26, 41, 0.12);
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-translucent: rgba(255, 255, 255, 0.9);
+  --bg: #faf6ee;
+  --surface: #faf6ee;
+  --surface-translucent: rgba(250, 246, 238, 0.92);
   --text: #40101b;
   --muted: #855a64;
   --border: #5c1a29;
