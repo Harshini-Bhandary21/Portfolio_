@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import ViewToggle, { useStoredChoice } from '../ui/ViewToggle.jsx';
 import { projects } from '../../data/projects.js';
 
 const hueOf = (p) => (projects.indexOf(p) * 47 + 250) % 360;
@@ -61,18 +62,11 @@ function ProjectModal({ p, hue, onClose, onStep }) {
   );
 }
 
-const VIEW_KEY = 'projects-view';
-const readView = () => {
-  try {
-    return localStorage.getItem(VIEW_KEY) === 'slider' ? 'slider' : 'stack';
-  } catch {
-    return 'stack';
-  }
-};
+const VIEWS = [['stack', 'Stack'], ['slider', 'Slider']];
 
 export default function Projects() {
   const [open, setOpen] = useState(null); // { p, opener }
-  const [view, setView] = useState(readView);
+  const [view, choose] = useStoredChoice('projects-view', VIEWS);
   const [paused, setPaused] = useState(false);
   const step = useCallback((d) => {
     setOpen((o) => o && { ...o, p: projects[(projects.indexOf(o.p) + d + projects.length) % projects.length] });
@@ -80,10 +74,6 @@ export default function Projects() {
   const close = () => {
     open?.opener?.focus();
     setOpen(null);
-  };
-  const choose = (v) => {
-    setView(v);
-    try { localStorage.setItem(VIEW_KEY, v); } catch { /* storage unavailable */ }
   };
   const card = (p, i) => (
     <article className="stack-card">
@@ -107,13 +97,7 @@ export default function Projects() {
         <p className="eyebrow">Projects</p>
         <div className="stack-head">
           <h2 className="stack-title">Things I've built</h2>
-          <div className="view-toggle" role="group" aria-label="Project layout">
-            {['stack', 'slider'].map((v) => (
-              <button key={v} type="button" aria-pressed={view === v} className={view === v ? 'is-on' : ''} onClick={() => choose(v)}>
-                {v === 'stack' ? 'Stack' : 'Slider'}
-              </button>
-            ))}
-          </div>
+          <ViewToggle options={VIEWS} value={view} onChange={choose} label="Project layout" />
         </div>
 
         {view === 'stack' && (
