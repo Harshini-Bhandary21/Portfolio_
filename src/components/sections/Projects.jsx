@@ -1,28 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { projects } from '../../data/projects.js';
 
-// Deal projects into two rows that slide in opposite directions.
+const hueOf = (p) => (projects.indexOf(p) * 47 + 250) % 360;
+// Slider view: projects dealt into two rows that drift in opposite directions.
 const rows = [projects.filter((_, i) => i % 2 === 0), projects.filter((_, i) => i % 2 === 1)];
-
-function Card({ p, hue, hidden, onOpen }) {
-  return (
-    <li aria-hidden={hidden || undefined}>
-      <button
-        type="button"
-        className="show-card show-card-project"
-        style={{ '--h': hue }}
-        tabIndex={hidden ? -1 : undefined}
-        onClick={(e) => onOpen(p, e.currentTarget)}
-      >
-        <span className="show-kicker">{p.featured ? 'Featured project' : 'Project'}</span>
-        <h3>{p.title}</h3>
-        <p>{p.subtitle}</p>
-        <ul>{p.stack.slice(0, 3).map((s) => <li key={s}>{s}</li>)}</ul>
-        <span className="show-link">View details →</span>
-      </button>
-    </li>
-  );
-}
 
 // Full project write-up. Esc / backdrop click / close button dismiss it; focus returns to the opening card.
 function ProjectModal({ p, hue, onClose, onStep }) {
@@ -80,9 +61,19 @@ function ProjectModal({ p, hue, onClose, onStep }) {
   );
 }
 
+const VIEW_KEY = 'projects-view';
+const readView = () => {
+  try {
+    return localStorage.getItem(VIEW_KEY) === 'slider' ? 'slider' : 'stack';
+  } catch {
+    return 'stack';
+  }
+};
+
 export default function Projects() {
-  const [paused, setPaused] = useState(false);
   const [open, setOpen] = useState(null); // { p, opener }
+  const [view, setView] = useState(readView);
+  const [paused, setPaused] = useState(false);
   const step = useCallback((d) => {
     setOpen((o) => o && { ...o, p: projects[(projects.indexOf(o.p) + d + projects.length) % projects.length] });
   }, []);
@@ -90,28 +81,83 @@ export default function Projects() {
     open?.opener?.focus();
     setOpen(null);
   };
-  return (
-    <section id="projects" className={`showcase ${paused || open ? 'is-paused' : ''}`} aria-label="Projects">
-      {rows.map((row, r) => (
-        <div className={`show-row ${r ? 'is-reverse' : ''}`} key={r}>
-          <ul className="show-track">
-            {[0, 1].flatMap((copy) =>
-              row.map((p) => (
-                <Card p={p} hue={(projects.indexOf(p) * 47 + 250) % 360} hidden={copy === 1} onOpen={(proj, opener) => setOpen({ p: proj, opener })} key={`${copy}-${p.title}`} />
-              ))
-            )}
-          </ul>
-        </div>
-      ))}
-      <div className="show-title">
-        <p className="eyebrow">Projects</p>
-        <h2>Things I've built</h2>
-        <p>Select a card to open it</p>
+  const choose = (v) => {
+    setView(v);
+    try { localStorage.setItem(VIEW_KEY, v); } catch { /* storage unavailable */ }
+  };
+  const card = (p, i) => (
+    <article className="stack-card">
+      <span className="stack-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+      <span className="show-kicker">{p.featured ? 'Featured project' : 'Project'}</span>
+      <h3>{p.title}</h3>
+      <p className="stack-sub">{p.subtitle}</p>
+      <p className="stack-desc">{p.description[0]}</p>
+      <ul className="stack-tags">{p.stack.map((s) => <li key={s}>{s}</li>)}</ul>
+      <div className="stack-actions">
+        <button type="button" className="stack-btn" onClick={(e) => setOpen({ p, opener: e.currentTarget })}>View details →</button>
+        {p.demo && <a className="stack-link" href={p.demo} target="_blank" rel="noopener noreferrer">Live demo ↗</a>}
+        {p.github && <a className="stack-link" href={p.github} target="_blank" rel="noopener noreferrer">Code ↗</a>}
       </div>
-      <button className="show-pause" onClick={() => setPaused((x) => !x)} aria-label={paused ? 'Play projects' : 'Pause projects'}>
-        {paused ? '▶' : '❚❚'}
-      </button>
-      {open && <ProjectModal p={open.p} hue={(projects.indexOf(open.p) * 47 + 250) % 360} onClose={close} onStep={step} />}
+    </article>
+  );
+
+  return (
+    <section id="projects" className={`stack-section is-${view}`} aria-label="Projects">
+      <div className="container">
+        <p className="eyebrow">Projects</p>
+        <div className="stack-head">
+          <h2 className="stack-title">Things I've built</h2>
+          <div className="view-toggle" role="group" aria-label="Project layout">
+            {['stack', 'slider'].map((v) => (
+              <button key={v} type="button" aria-pressed={view === v} className={view === v ? 'is-on' : ''} onClick={() => choose(v)}>
+                {v === 'stack' ? 'Stack' : 'Slider'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {view === 'stack' && (
+          <ol className="stack-list">
+            {projects.map((p, i) => (
+              <li className="stack-item" style={{ '--i': i, '--h': hueOf(p) }} key={p.title}>{card(p, i)}</li>
+            ))}
+          </ol>
+        )}
+      </div>
+
+      {view === 'slider' && (
+        <div className={`showcase ${paused || open ? 'is-paused' : ''}`}>
+          {rows.map((row, r) => (
+            <div className={`show-row ${r ? 'is-reverse' : ''}`} key={r}>
+              <ul className="show-track">
+                {[0, 1].flatMap((copy) =>
+                  row.map((p) => (
+                    <li key={`${copy}-${p.title}`} aria-hidden={copy === 1 || undefined}>
+                      <button
+                        type="button"
+                        className="show-card show-card-project"
+                        style={{ '--h': hueOf(p) }}
+                        tabIndex={copy === 1 ? -1 : undefined}
+                        onClick={(e) => setOpen({ p, opener: e.currentTarget })}
+                      >
+                        <span className="show-kicker">{p.featured ? 'Featured project' : 'Project'}</span>
+                        <h3>{p.title}</h3>
+                        <p>{p.subtitle}</p>
+                        <ul>{p.stack.slice(0, 3).map((s) => <li key={s}>{s}</li>)}</ul>
+                        <span className="show-link">View details →</span>
+                      </button>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+          ))}
+          <button className="show-pause" onClick={() => setPaused((x) => !x)} aria-label={paused ? 'Play projects' : 'Pause projects'}>
+            {paused ? '▶' : '❚❚'}
+          </button>
+        </div>
+      )}
+      {open && <ProjectModal p={open.p} hue={hueOf(open.p)} onClose={close} onStep={step} />}
     </section>
   );
 }

@@ -210,9 +210,6 @@ html.is-loaded .hbs-name .split-word > span {
   -webkit-text-stroke: 1.5px var(--accent); opacity: 0.85;
 }
 
-/* the About slide overlaps the band above it by its curved lip; pad the band so no text is covered */
-.hbs + .text-band { padding-bottom: 90px; }
-@media (max-width: 720px) { .hbs + .text-band { padding-bottom: 58px; } }
 
 /* ---------- Project details modal ---------- */
 html.modal-open { overflow: hidden; }
@@ -268,3 +265,96 @@ html.modal-open { overflow: hidden; }
 .local-time { display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 4px; font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
 .local-time i { width: 8px; height: 8px; border-radius: 50%; background: #2fbf6b; box-shadow: 0 0 0 4px rgba(47, 191, 107, 0.2); }
 @media (prefers-reduced-motion: reduce) { .role-word { animation: none; } }
+
+/* =========================================================================
+   About — bento grid
+   ========================================================================= */
+.bento {
+  display: grid; gap: 16px; margin-top: 36px;
+  grid-template-columns: 1.05fr 1.1fr 1.1fr 0.9fr;
+  grid-template-areas: 'photo intro intro stats' 'photo edu edu stats' 'langs edu edu stats';
+}
+.reveal:not(.is-visible) .bento-tile { opacity: 0; }
+.reveal.is-visible .bento-tile { animation: rise-in 0.7s calc(var(--n, 0) * 0.08s) cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.bento-tile { border-radius: 26px; padding: 26px 28px; color: #5c1a29; background: #fbeef1; box-shadow: 0 16px 34px -20px rgba(20, 4, 9, 0.9); }
+.bento-tile h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 1.7rem; line-height: 1.1; }
+
+.bento-photo { grid-area: photo; position: relative; display: grid; place-items: end center; margin: 0; padding: 0; overflow: hidden; min-height: 380px;
+  background: linear-gradient(160deg, #7a263a, #4a101e); }
+.bento-disc { position: absolute; left: 10%; right: 10%; top: 12%; aspect-ratio: 1; border-radius: 50%; background: #fbeef1; }
+.bento-photo img { position: relative; width: 112%; max-width: none; height: 88%; object-fit: cover; object-position: 50% 0; }
+
+.bento-intro { grid-area: intro; display: grid; align-content: center; gap: 12px; }
+.bento-role { font-family: var(--script); font-size: 2.4rem; line-height: 1; color: #7a263a; }
+.bento-lead { font-size: 1.08rem; line-height: 1.6; color: #40101b; }
+.bento-intro .local-time { color: #855a64; margin: 4px 0 0; }
+
+.bento-stats { grid-area: stats; display: grid; gap: 16px; grid-template-rows: repeat(4, 1fr); }
+.bento-stat { display: grid; align-content: center; justify-items: start; gap: 2px; padding: 18px 22px; }
+.bento-stat strong { font-family: var(--display); font-weight: 400; font-size: 2.3rem; line-height: 1; }
+.bento-stat > span:last-child { font-size: 0.9rem; color: #855a64; }
+.bento-stat .about-ico { width: 40px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: #f4d6dd; margin-bottom: 8px; }
+.bento-stat .about-ico svg { width: 55%; height: 55%; }
+
+.bento-edu { grid-area: edu; background: #4a101e; color: #fff; border: 1px solid rgba(255, 255, 255, 0.16); }
+.bento-edu h3 { color: #fff; margin-bottom: 14px; }
+.bento-edu .about-timeline { position: relative; display: grid; gap: 18px; padding-left: 28px; }
+.bento-edu .about-timeline::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: rgba(255, 255, 255, 0.25); }
+.bento-edu .about-timeline li { position: relative; line-height: 1.35; }
+.bento-edu .about-timeline li::before { content: ''; position: absolute; left: -28px; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18); }
+.bento-edu .period { display: block; font-family: var(--mono); font-size: 0.78rem; color: rgba(255, 255, 255, 0.7); }
+.bento-edu h4 { font-size: 1.05rem; font-weight: 800; color: #fff; margin: 2px 0; }
+.bento-edu p { font-size: 0.93rem; color: rgba(255, 255, 255, 0.88); }
+.bento-edu strong { color: #fff; }
+
+.bento-langs { grid-area: langs; display: grid; align-content: space-between; gap: 14px; background: #f4d6dd; }
+.bento-langs ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.bento-langs li { background: #5c1a29; color: #fff; font-weight: 700; font-size: 0.85rem; padding: 8px 16px; border-radius: 999px; }
+
+@media (max-width: 980px) {
+  .bento { grid-template-columns: 1fr 1fr; grid-template-areas: 'photo intro' 'stats stats' 'edu edu' 'langs langs'; }
+  .bento-stats { grid-template-columns: repeat(4, 1fr); grid-template-rows: none; }
+}
+@media (max-width: 640px) {
+  .bento { grid-template-columns: 1fr; grid-template-areas: 'photo' 'intro' 'stats' 'edu' 'langs'; }
+  .bento-photo { min-height: 340px; }
+  .bento-stats { grid-template-columns: 1fr 1fr; }
+  .bento-tile { padding: 22px; }
+}
+
+/* =========================================================================
+   Projects — sticky stacking cards
+   ========================================================================= */
+.stack-section { position: relative; background: #5c1a29; color: #fff; padding: 110px 0 140px; overflow-x: clip; }
+.stack-section.is-slider { padding-bottom: 110px; }
+.stack-section .eyebrow { color: #fff; font-size: 2.6rem; }
+.stack-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 40px; }
+.stack-title { font-size: clamp(2.6rem, 7vw, 5rem); color: #fff; }
+.stack-list { display: grid; gap: 34px; list-style: none; margin: 0; padding: 0; }
+.stack-item { position: sticky; top: calc(var(--nav-h) + 24px + var(--i) * 14px); }
+.stack-card {
+  position: relative; overflow: hidden; display: grid; align-content: end; gap: 10px; min-height: min(440px, 62svh); padding: clamp(24px, 4vw, 44px);
+  border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  background:
+    radial-gradient(circle at 88% 8%, hsl(var(--h) 90% 60% / 0.5), transparent 52%),
+    linear-gradient(145deg, hsl(var(--h) 55% 24%), hsl(calc(var(--h) + 40) 60% 10%));
+}
+.stack-num { position: absolute; right: 28px; top: 12px; font-family: var(--display); font-size: clamp(5rem, 14vw, 10rem); line-height: 1; color: transparent; -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.35); }
+.stack-card h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.9rem, 4.6vw, 3.2rem); line-height: 1.05; max-width: 16ch; }
+.stack-sub { font-family: var(--mono); font-size: 0.85rem; color: rgba(255, 255, 255, 0.75); }
+.stack-desc { max-width: 62ch; line-height: 1.6; color: rgba(255, 255, 255, 0.88); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.stack-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.stack-tags li { font-family: var(--mono); font-size: 0.74rem; padding: 4px 11px; border-radius: 99px; background: rgba(255, 255, 255, 0.15); }
+.stack-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; }
+.stack-btn { padding: 11px 22px; border-radius: 999px; border: 0; font-weight: 700; background: #fff; color: #5c1a29; transition: transform 0.2s; }
+.stack-btn:hover { transform: translateY(-2px); }
+.stack-link { font-weight: 600; border-bottom: 1.5px solid rgba(255, 255, 255, 0.5); padding-bottom: 1px; }
+.stack-link:hover { border-color: #fff; }
+@media (max-width: 640px) { .stack-item { top: calc(var(--nav-h) + 12px + var(--i) * 10px); } .stack-card { min-height: 0; } }
+@media (prefers-reduced-motion: reduce) { .stack-item { position: static; } }
+
+/* Stack / Slider switch */
+.view-toggle { display: inline-flex; padding: 4px; gap: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); }
+.view-toggle button { padding: 8px 20px; border-radius: 999px; border: 0; background: transparent; color: #fff; font-weight: 700; font-size: 0.85rem; transition: background 0.2s, color 0.2s; }
+.view-toggle button.is-on { background: #fff; color: #5c1a29; }
+

@@ -1,4 +1,5 @@
-import useReveal from '../../hooks/useReveal.js';
+import Section from '../ui/Section.jsx';
+import LocalTime from '../ui/LocalTime.jsx';
 import { profile, education } from '../../data/profile.js';
 import CountUp from '../ui/CountUp.jsx';
 import { languages } from '../../data/highlights.js';
@@ -16,53 +17,50 @@ const icons = [
 ];
 
 export default function About() {
-  const ref = useReveal();
   return (
-    <section id="about" className="section about-slide">
-      <div className="about-inner reveal" ref={ref}>
-        <span className="about-dots" aria-hidden="true"><i /><i /><i /></span>
+    <Section id="about" eyebrow="About" title="Building software that matters">
+      <div className="bento">
+        <figure className="bento-tile bento-photo" style={{ '--n': 0 }}>
+          <span className="bento-disc" aria-hidden="true" />
+          <img src={profile.avatarCutout} alt={profile.name} loading="lazy" />
+        </figure>
 
-        <div className="about-left">
-          <ul className="about-stats">
-            {profile.stats.map((s, i) => (
-              <li key={s.label}>
-                <span className="about-ico">{icons[i]}</span>
-                <span className="about-stat-text">
-                  <strong><CountUp value={s.value} /></strong>
-                  <span>{s.label}</span>
-                </span>
+        <div className="bento-tile bento-intro" style={{ '--n': 1 }}>
+          <p className="bento-role">{profile.role}</p>
+          <p className="bento-lead">{profile.summary}</p>
+          <LocalTime place={profile.location} />
+        </div>
+
+        <ul className="bento-stats">
+          {profile.stats.map((s, i) => (
+            <li className="bento-tile bento-stat" style={{ '--n': 2 + i }} key={s.label}>
+              <span className="about-ico">{icons[i]}</span>
+              <strong><CountUp value={s.value} /></strong>
+              <span>{s.label}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="bento-tile bento-edu" style={{ '--n': 6 }}>
+          <h3>Education</h3>
+          <ul className="about-timeline">
+            {education.map((e) => (
+              <li key={e.school}>
+                <span className="period">{e.period}</span>
+                <h4>{e.school}</h4>
+                <p>{e.detail} · <strong>{e.highlight}</strong></p>
               </li>
             ))}
           </ul>
-          <ul className="about-langs" aria-label="Languages">
+        </div>
+
+        <div className="bento-tile bento-langs" style={{ '--n': 7 }}>
+          <h3>Languages</h3>
+          <ul aria-label="Languages">
             {languages.map((l) => <li key={l}>{l}</li>)}
           </ul>
         </div>
-
-        <div className="about-mid">
-          <span className="about-ring" aria-hidden="true" />
-          <span className="about-disc" aria-hidden="true" />
-          <img src={profile.avatarCutout} alt={profile.name} loading="lazy" />
-        </div>
-
-        <div className="about-right">
-          <p className="about-eyebrow">About</p>
-          <h2 className="about-title">Building software that matters</h2>
-          <div className="about-card">
-            <p className="about-lead">{profile.summary}</p>
-            <h3 className="about-edu">Education</h3>
-            <ul className="about-timeline">
-              {education.map((e) => (
-                <li key={e.school}>
-                  <span className="period">{e.period}</span>
-                  <h4>{e.school}</h4>
-                  <p>{e.detail} · <strong>{e.highlight}</strong></p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
       </div>
-    </section>
+    </Section>
   );
 }
