@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { projects } from '../../data/projects.js';
 
 // Deal projects into two rows that slide in opposite directions.
@@ -25,19 +25,27 @@ function Card({ p, hue, hidden, onOpen }) {
 }
 
 // Full project write-up. Esc / backdrop click / close button dismiss it; focus returns to the opening card.
-function ProjectModal({ p, hue, onClose }) {
+function ProjectModal({ p, hue, onClose, onStep }) {
   const closeRef = useRef(null);
+  const handlers = useRef({ onClose, onStep });
+  handlers.current = { onClose, onStep }; // keep the key listener stable across re-renders
   useEffect(() => {
     const root = document.documentElement;
     root.classList.add('modal-open');
     closeRef.current?.focus();
-    const onKey = (e) => e.key === 'Escape' && onClose();
+    const onKey = (e) => {
+      if (e.key === 'Escape') handlers.current.onClose();
+      if (e.key === 'ArrowLeft') handlers.current.onStep(-1);
+      if (e.key === 'ArrowRight') handlers.current.onStep(1);
+    };
     document.addEventListener('keydown', onKey);
     return () => {
       root.classList.remove('modal-open');
       document.removeEventListener('keydown', onKey);
     };
-  }, [onClose]);
+  }, []);
+
+  const n = projects.indexOf(p) + 1;
 
   return (
     <div className="pm-backdrop" onClick={onClose}>
@@ -56,6 +64,11 @@ function ProjectModal({ p, hue, onClose }) {
         <p className="pm-sub">{p.subtitle}</p>
         {p.description.map((d) => <p key={d}>{d}</p>)}
         <ul className="pm-stack">{p.stack.map((s) => <li key={s}>{s}</li>)}</ul>
+        <div className="pm-nav">
+          <button type="button" onClick={() => onStep(-1)} aria-label="Previous project">← Prev</button>
+          <span aria-live="polite">{n} / {projects.length}</span>
+          <button type="button" onClick={() => onStep(1)} aria-label="Next project">Next →</button>
+        </div>
         {(p.demo || p.github) && (
           <div className="pm-links">
             {p.demo && <a className="btn btn-primary" href={p.demo} target="_blank" rel="noopener noreferrer">Live demo ↗</a>}
@@ -70,6 +83,9 @@ function ProjectModal({ p, hue, onClose }) {
 export default function Projects() {
   const [paused, setPaused] = useState(false);
   const [open, setOpen] = useState(null); // { p, opener }
+  const step = useCallback((d) => {
+    setOpen((o) => o && { ...o, p: projects[(projects.indexOf(o.p) + d + projects.length) % projects.length] });
+  }, []);
   const close = () => {
     open?.opener?.focus();
     setOpen(null);
@@ -95,7 +111,7 @@ export default function Projects() {
       <button className="show-pause" onClick={() => setPaused((x) => !x)} aria-label={paused ? 'Play projects' : 'Pause projects'}>
         {paused ? '▶' : '❚❚'}
       </button>
-      {open && <ProjectModal p={open.p} hue={(projects.indexOf(open.p) * 47 + 250) % 360} onClose={close} />}
+      {open && <ProjectModal p={open.p} hue={(projects.indexOf(open.p) * 47 + 250) % 360} onClose={close} onStep={step} />}
     </section>
   );
 }
