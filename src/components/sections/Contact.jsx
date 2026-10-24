@@ -6,8 +6,7 @@ import TechCube from '../ui/TechCube.jsx';
 import { MailIcon } from '../ui/Icons.jsx';
 import { profile } from '../../data/profile.js';
 
-// Set VITE_CONTACT_ENDPOINT (e.g. a Formspree / Web3Forms URL) to deliver messages directly.
-// Without it, submitting opens the visitor's mail app with the message pre-filled.
+// Messages are delivered through Formspree: set VITE_CONTACT_ENDPOINT to your https://formspree.io/f/<id> URL.
 const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
 
 export default function Contact() {
@@ -20,7 +19,7 @@ export default function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      window.location.href = `mailto:${profile.email}`; // clipboard blocked: fall back to the mail app
+      setCopied(false); // clipboard blocked: the address stays visible on the button
     }
   };
 
@@ -31,10 +30,7 @@ export default function Contact() {
     if (data.website) return; // honeypot
 
     if (!ENDPOINT) {
-      const subject = encodeURIComponent(`Portfolio message from ${data.name}`);
-      const body = encodeURIComponent(`${data.message}\n\n— ${data.name} (${data.email})`);
-      window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-      setStatus('sent');
+      setStatus('error'); // endpoint not configured
       return;
     }
 
@@ -62,8 +58,7 @@ export default function Contact() {
             My inbox is open.
           </p>
           <div className="contact-links">
-            <a className="btn btn-primary" href={`mailto:${profile.email}`}><MailIcon /> {profile.email}</a>
-            <button type="button" className="btn copy-btn" onClick={copyEmail}>{copied ? 'Copied ✓' : 'Copy email'}</button>
+            <button type="button" className="btn btn-primary" onClick={copyEmail}><MailIcon /> {copied ? 'Copied ✓' : profile.email}</button>
           </div>
           <LocalTime place={profile.location} />
           <SocialLinks />
@@ -88,8 +83,8 @@ export default function Contact() {
             {status === 'sending' ? 'Sending…' : 'Send message'}
           </button>
           <p className="cf-status" role="status" aria-live="polite" data-state={status}>
-            {status === 'sent' && (ENDPOINT ? 'Thanks! Your message has been sent.' : 'Opening your email app to send the message…')}
-            {status === 'error' && `Something went wrong. Please email ${profile.email} directly.`}
+            {status === 'sent' && 'Thanks! Your message has been sent.'}
+            {status === 'error' && `Something went wrong. Please try again, or reach me at ${profile.email}.`}
           </p>
         </form>
       </div>

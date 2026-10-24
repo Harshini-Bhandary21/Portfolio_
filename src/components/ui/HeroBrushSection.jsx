@@ -16,7 +16,7 @@ const links = [
   { label: 'GitHub', href: profile.socials.github, Icon: GithubIcon, external: true },
   { label: 'LinkedIn', href: profile.socials.linkedin, Icon: LinkedinIcon, external: true },
   { label: 'Instagram', href: profile.socials.instagram, Icon: InstagramIcon, external: true },
-  { label: 'Email', href: `mailto:${profile.email}`, Icon: MailIcon },
+  { label: 'Email', href: '#contact', Icon: MailIcon },
   { label: 'Resume', href: profile.resume, Icon: DownloadIcon, download: true },
 ];
 
